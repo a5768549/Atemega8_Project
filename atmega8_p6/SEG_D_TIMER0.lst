@@ -1,0 +1,792 @@
+Interrupt Vectors
+    00000 C06A      RJMP	__start|__text_start
+    00009 C24C      RJMP	_timer0_ovf_isr
+
+Program Code (text area)
+__start|__text_start:
+    0006B E5CF      LDI	R28,0x5F
+    0006C E0D4      LDI	R29,4
+    0006D BFCD      OUT	0x3D,R28
+    0006E BFDE      OUT	0x3E,R29
+    0006F 51CE      SUBI	R28,0x1E
+    00070 40D0      SBCI	R29,0
+    00071 EA0A      LDI	R16,0xAA
+    00072 8308      ST	Y,R16
+    00073 2400      CLR	R0
+    00074 E1E0      LDI	R30,0x10
+    00075 E0F1      LDI	R31,1
+    00076 E011      LDI	R17,1
+    00077 31E0      CPI	R30,0x10
+    00078 07F1      CPC	R31,R17
+    00079 F011      BEQ	0x007C
+    0007A 9201      ST	Z+,R0
+    0007B CFFB      RJMP	0x0077
+    0007C 8300      ST	Z,R16
+    0007D E2E6      LDI	R30,0x26
+    0007E E0F0      LDI	R31,0
+    0007F E6A0      LDI	R26,0x60
+    00080 E0B0      LDI	R27,0
+    00081 E010      LDI	R17,0
+    00082 E000      LDI	R16,0
+    00083 BF0B      OUT	0x3B,R16
+    00084 3DE6      CPI	R30,0xD6
+    00085 07F1      CPC	R31,R17
+    00086 F021      BEQ	0x008B
+    00087 95C8      LPM
+    00088 9631      ADIW	R30,1
+    00089 920D      ST	X+,R0
+    0008A CFF9      RJMP	0x0084
+    0008B D20D      RCALL	_main
+_exit:
+    0008C CFFF      RJMP	_exit
+FILE: E:\1、附件-M8\atmega8_p6\main.c
+(0001) //ICC-AVR application builder
+(0002) //atmega8_p6
+(0003) /*
+(0004)     功能：計時器
+(0005)         S1按鈕：七段功能依序(七段繞圈圈檢測)
+(0006)         S2按鈕：
+(0007)                 第一下：顯示目前日期（月，日）
+(0008)                 第二下：顯示目前時間（時，分）
+(0009)                 第三下：由0000計數到0010（間隔一秒），結束計數時回到S1按鈕功能
+(0010) */
+(0011)  
+(0012) #include<iom8v.h>
+(0013) #include<macros.h>
+(0014) 
+(0015) #define S_1      PORTC &= ~BIT(0);PORTC|=BIT(1) ;PORTC|=BIT(2) ;PORTC|=BIT(3); 
+(0016) #define S_2      PORTC |= BIT(0) ;PORTC&=~BIT(1);PORTC|=BIT(2) ;PORTC|=BIT(3);
+(0017) #define S_3      PORTC |= BIT(0) ;PORTC|=BIT(1) ;PORTC&=~BIT(2);PORTC|=BIT(3);  
+(0018) #define S_4      PORTC |= BIT(0) ;PORTC|=BIT(1) ;PORTC|=BIT(2) ;PORTC&=~BIT(3);
+(0019) #define S_OFF    PORTC |= BIT(0) ;PORTC|=BIT(1) ;PORTC|=BIT(2) ;PORTC|=BIT(3);  
+(0020) #define S_ON     PORTC &= ~BIT(0);PORTC&=~BIT(1);PORTC&=~BIT(2);PORTC&=~BIT(3);
+(0021) 
+(0022) unsigned int seg[11] = 
+(0023) {
+(0024) 	0x3f,0x06,0x5b,0x4f,
+(0025) 	0x66,0x6d,0x7d,0x07,
+(0026) 	0x7f,0x6f,0x71
+(0027) };
+(0028)  
+(0029) unsigned int btn1_1[6] =
+(0030) {
+(0031)     0x01,0x02,0x04,0x08,0x10,0x20
+(0032) };
+(0033)  
+(0034) unsigned int btn1_2[6] =
+(0035) {
+(0036)     0x20,0x10,0x08,0x04,0x02,0x01
+(0037) };
+(0038)  
+(0039) unsigned int btn1_3[5] =
+(0040) {
+(0041)     0x03,0x06,0x0C,0x18,0x30
+(0042) };
+(0043)  
+(0044) unsigned int btn1_4[5] =
+(0045) {
+(0046)     0x30,0x18,0x0C,0x06,0x03
+(0047) };
+(0048)  
+(0049) unsigned int btn1_5[6] =
+(0050) {
+(0051)     0x01,0x03,0x07,0x0F,0x1F,0x3F
+(0052) };
+(0053)  
+(0054) unsigned int btn1_6[6] =
+(0055) {
+(0056)     0x3F,0x1F,0x0F,0x07,0x03,0x01
+(0057) };
+(0058)  
+(0059) unsigned int btn1_7[3] =
+(0060) {
+(0061)     0x0C,0x12,0x21
+(0062) };
+(0063)  
+(0064) unsigned int btn1_8[3] =
+(0065) {
+(0066)     0x21,0x12,0x0C
+(0067) };
+(0068)  
+(0069) unsigned int btn1_9[11] =
+(0070) {
+(0071)     0x01,0x02,0x04,0x08,0x10,0x20,0x10,0x08,0x04,0x02,0x01
+(0072) };
+(0073)  
+(0074) unsigned int btn1_10[11] =
+(0075) {
+(0076)     0x20,0x10,0x08,0x04,0x02,0x01,0x02,0x04,0x08,0x10,0x20
+(0077) };
+(0078)  
+(0079) unsigned int btn1_index[10] =
+(0080) {
+(0081)     6,6,5,5,6,6,3,3,11,11
+(0082) };
+(0083)  
+(0084) //初始化 變量 聲明//////////////////////////////////////////////////////////////
+(0085) int data = 0;
+(0086) int data2 = 0;
+(0087) int i = 0;
+(0088) int count = 0;
+(0089) int count2 = 0;
+(0090)  
+(0091) void btn1_count(void)
+(0092) {
+(0093)  S_OFF;
+_btn1_count:
+    0008D 9AA8      SBI	0x15,0
+    0008E 9AA9      SBI	0x15,1
+    0008F 9AAA      SBI	0x15,2
+    00090 9AAB      SBI	0x15,3
+(0094)     for(i=0;i<btn1_index[count];i++)
+    00091 2422      CLR	R2
+    00092 2433      CLR	R3
+    00093 9230 010B STS	i+1,R3
+    00095 9220 010A STS	i,R2
+    00097 C0FE      RJMP	0x0196
+(0095)     {
+(0096)         switch(count)
+    00098 9020 010C LDS	R2,count
+    0009A 9030 010D LDS	R3,count+1
+    0009C 2022      TST	R2
+    0009D F419      BNE	0x00A1
+    0009E 2033      TST	R3
+    0009F F409      BNE	0x00A1
+    000A0 C02F      RJMP	0x00D0
+    000A1 01C1      MOVW	R24,R2
+    000A2 3081      CPI	R24,1
+    000A3 E0E0      LDI	R30,0
+    000A4 079E      CPC	R25,R30
+    000A5 F409      BNE	0x00A7
+    000A6 C03C      RJMP	0x00E3
+    000A7 3082      CPI	R24,2
+    000A8 E0E0      LDI	R30,0
+    000A9 079E      CPC	R25,R30
+    000AA F409      BNE	0x00AC
+    000AB C04A      RJMP	0x00F6
+    000AC 3083      CPI	R24,3
+    000AD E0E0      LDI	R30,0
+    000AE 079E      CPC	R25,R30
+    000AF F409      BNE	0x00B1
+    000B0 C058      RJMP	0x0109
+    000B1 3084      CPI	R24,4
+    000B2 E0E0      LDI	R30,0
+    000B3 079E      CPC	R25,R30
+    000B4 F409      BNE	0x00B6
+    000B5 C066      RJMP	0x011C
+    000B6 3085      CPI	R24,5
+    000B7 E0E0      LDI	R30,0
+    000B8 079E      CPC	R25,R30
+    000B9 F409      BNE	0x00BB
+    000BA C074      RJMP	0x012F
+    000BB 3086      CPI	R24,6
+    000BC E0E0      LDI	R30,0
+    000BD 079E      CPC	R25,R30
+    000BE F409      BNE	0x00C0
+    000BF C082      RJMP	0x0142
+    000C0 3087      CPI	R24,7
+    000C1 E0E0      LDI	R30,0
+    000C2 079E      CPC	R25,R30
+    000C3 F409      BNE	0x00C5
+    000C4 C090      RJMP	0x0155
+    000C5 3088      CPI	R24,0x8
+    000C6 E0E0      LDI	R30,0
+    000C7 079E      CPC	R25,R30
+    000C8 F409      BNE	0x00CA
+    000C9 C09E      RJMP	0x0168
+    000CA 3089      CPI	R24,0x9
+    000CB E0E0      LDI	R30,0
+    000CC 079E      CPC	R25,R30
+    000CD F409      BNE	0x00CF
+    000CE C0AC      RJMP	0x017B
+    000CF C0BD      RJMP	0x018D
+(0097)         {
+(0098)             case 0:
+(0099)                 PORTC = ~btn1_1[i];
+    000D0 E786      LDI	R24,0x76
+    000D1 E090      LDI	R25,0
+    000D2 91E0 010A LDS	R30,i
+    000D4 91F0 010B LDS	R31,i+1
+    000D6 0FEE      LSL	R30
+    000D7 1FFF      ROL	R31
+    000D8 0FE8      ADD	R30,R24
+    000D9 1FF9      ADC	R31,R25
+    000DA 8020      LD	R2,Z
+    000DB 8031      LDD	R3,Z+1
+    000DC 9420      COM	R2
+    000DD 9430      COM	R3
+    000DE BA25      OUT	0x15,R2
+(0100)                 delay_ms(1000);
+    000DF EE08      LDI	R16,0xE8
+    000E0 E013      LDI	R17,3
+    000E1 D13B      RCALL	_delay_ms
+(0101)             break;
+    000E2 C0AA      RJMP	0x018D
+(0102)             case 1:
+(0103)                 PORTC = ~btn1_2[i];
+    000E3 E882      LDI	R24,0x82
+    000E4 E090      LDI	R25,0
+    000E5 91E0 010A LDS	R30,i
+    000E7 91F0 010B LDS	R31,i+1
+    000E9 0FEE      LSL	R30
+    000EA 1FFF      ROL	R31
+    000EB 0FE8      ADD	R30,R24
+    000EC 1FF9      ADC	R31,R25
+    000ED 8020      LD	R2,Z
+    000EE 8031      LDD	R3,Z+1
+    000EF 9420      COM	R2
+    000F0 9430      COM	R3
+    000F1 BA25      OUT	0x15,R2
+(0104)                 delay_ms(1000);
+    000F2 EE08      LDI	R16,0xE8
+    000F3 E013      LDI	R17,3
+    000F4 D128      RCALL	_delay_ms
+(0105)             break;
+    000F5 C097      RJMP	0x018D
+(0106)             case 2:
+(0107)                 PORTC = ~btn1_3[i];
+    000F6 E88E      LDI	R24,0x8E
+    000F7 E090      LDI	R25,0
+    000F8 91E0 010A LDS	R30,i
+    000FA 91F0 010B LDS	R31,i+1
+    000FC 0FEE      LSL	R30
+    000FD 1FFF      ROL	R31
+    000FE 0FE8      ADD	R30,R24
+    000FF 1FF9      ADC	R31,R25
+    00100 8020      LD	R2,Z
+    00101 8031      LDD	R3,Z+1
+    00102 9420      COM	R2
+    00103 9430      COM	R3
+    00104 BA25      OUT	0x15,R2
+(0108)                 delay_ms(1000);
+    00105 EE08      LDI	R16,0xE8
+    00106 E013      LDI	R17,3
+    00107 D115      RCALL	_delay_ms
+(0109)             break;
+    00108 C084      RJMP	0x018D
+(0110)             case 3:
+(0111)                 PORTC = ~btn1_4[i];
+    00109 E988      LDI	R24,0x98
+    0010A E090      LDI	R25,0
+    0010B 91E0 010A LDS	R30,i
+    0010D 91F0 010B LDS	R31,i+1
+    0010F 0FEE      LSL	R30
+    00110 1FFF      ROL	R31
+    00111 0FE8      ADD	R30,R24
+    00112 1FF9      ADC	R31,R25
+    00113 8020      LD	R2,Z
+    00114 8031      LDD	R3,Z+1
+    00115 9420      COM	R2
+    00116 9430      COM	R3
+    00117 BA25      OUT	0x15,R2
+(0112)                 delay_ms(1000);
+    00118 EE08      LDI	R16,0xE8
+    00119 E013      LDI	R17,3
+    0011A D102      RCALL	_delay_ms
+(0113)             break;
+    0011B C071      RJMP	0x018D
+(0114)             case 4:
+(0115)                 PORTC = ~btn1_5[i];
+    0011C EA82      LDI	R24,0xA2
+    0011D E090      LDI	R25,0
+    0011E 91E0 010A LDS	R30,i
+    00120 91F0 010B LDS	R31,i+1
+    00122 0FEE      LSL	R30
+    00123 1FFF      ROL	R31
+    00124 0FE8      ADD	R30,R24
+    00125 1FF9      ADC	R31,R25
+    00126 8020      LD	R2,Z
+    00127 8031      LDD	R3,Z+1
+    00128 9420      COM	R2
+    00129 9430      COM	R3
+    0012A BA25      OUT	0x15,R2
+(0116)                 delay_ms(1000);
+    0012B EE08      LDI	R16,0xE8
+    0012C E013      LDI	R17,3
+    0012D D0EF      RCALL	_delay_ms
+(0117)             break;
+    0012E C05E      RJMP	0x018D
+(0118)             case 5:
+(0119)                 PORTC = ~btn1_6[i];
+    0012F EA8E      LDI	R24,0xAE
+    00130 E090      LDI	R25,0
+    00131 91E0 010A LDS	R30,i
+    00133 91F0 010B LDS	R31,i+1
+    00135 0FEE      LSL	R30
+    00136 1FFF      ROL	R31
+    00137 0FE8      ADD	R30,R24
+    00138 1FF9      ADC	R31,R25
+    00139 8020      LD	R2,Z
+    0013A 8031      LDD	R3,Z+1
+    0013B 9420      COM	R2
+    0013C 9430      COM	R3
+    0013D BA25      OUT	0x15,R2
+(0120)                 delay_ms(1000);
+    0013E EE08      LDI	R16,0xE8
+    0013F E013      LDI	R17,3
+    00140 D0DC      RCALL	_delay_ms
+(0121)             break;
+    00141 C04B      RJMP	0x018D
+(0122)             case 6:
+(0123)                 PORTC = ~btn1_7[i];
+    00142 EB8A      LDI	R24,0xBA
+    00143 E090      LDI	R25,0
+    00144 91E0 010A LDS	R30,i
+    00146 91F0 010B LDS	R31,i+1
+    00148 0FEE      LSL	R30
+    00149 1FFF      ROL	R31
+    0014A 0FE8      ADD	R30,R24
+    0014B 1FF9      ADC	R31,R25
+    0014C 8020      LD	R2,Z
+    0014D 8031      LDD	R3,Z+1
+    0014E 9420      COM	R2
+    0014F 9430      COM	R3
+    00150 BA25      OUT	0x15,R2
+(0124)                 delay_ms(1000);
+    00151 EE08      LDI	R16,0xE8
+    00152 E013      LDI	R17,3
+    00153 D0C9      RCALL	_delay_ms
+(0125)             break;
+    00154 C038      RJMP	0x018D
+(0126)             case 7:
+(0127)                 PORTC = ~btn1_8[i];
+    00155 EC80      LDI	R24,0xC0
+    00156 E090      LDI	R25,0
+    00157 91E0 010A LDS	R30,i
+    00159 91F0 010B LDS	R31,i+1
+    0015B 0FEE      LSL	R30
+    0015C 1FFF      ROL	R31
+    0015D 0FE8      ADD	R30,R24
+    0015E 1FF9      ADC	R31,R25
+    0015F 8020      LD	R2,Z
+    00160 8031      LDD	R3,Z+1
+    00161 9420      COM	R2
+    00162 9430      COM	R3
+    00163 BA25      OUT	0x15,R2
+(0128)                 delay_ms(1000);
+    00164 EE08      LDI	R16,0xE8
+    00165 E013      LDI	R17,3
+    00166 D0B6      RCALL	_delay_ms
+(0129)             break;
+    00167 C025      RJMP	0x018D
+(0130)             case 8:
+(0131)                 PORTC = ~btn1_9[i];
+    00168 EC86      LDI	R24,0xC6
+    00169 E090      LDI	R25,0
+    0016A 91E0 010A LDS	R30,i
+    0016C 91F0 010B LDS	R31,i+1
+    0016E 0FEE      LSL	R30
+    0016F 1FFF      ROL	R31
+    00170 0FE8      ADD	R30,R24
+    00171 1FF9      ADC	R31,R25
+    00172 8020      LD	R2,Z
+    00173 8031      LDD	R3,Z+1
+    00174 9420      COM	R2
+    00175 9430      COM	R3
+    00176 BA25      OUT	0x15,R2
+(0132)                 delay_ms(1000);
+    00177 EE08      LDI	R16,0xE8
+    00178 E013      LDI	R17,3
+    00179 D0A3      RCALL	_delay_ms
+(0133)             break;
+    0017A C012      RJMP	0x018D
+(0134)             case 9:
+(0135)                 PORTC = ~btn1_10[i];
+    0017B ED8C      LDI	R24,0xDC
+    0017C E090      LDI	R25,0
+    0017D 91E0 010A LDS	R30,i
+    0017F 91F0 010B LDS	R31,i+1
+    00181 0FEE      LSL	R30
+    00182 1FFF      ROL	R31
+    00183 0FE8      ADD	R30,R24
+    00184 1FF9      ADC	R31,R25
+    00185 8020      LD	R2,Z
+    00186 8031      LDD	R3,Z+1
+    00187 9420      COM	R2
+    00188 9430      COM	R3
+    00189 BA25      OUT	0x15,R2
+(0136)                 delay_ms(1000);
+    0018A EE08      LDI	R16,0xE8
+    0018B E013      LDI	R17,3
+    0018C D090      RCALL	_delay_ms
+    0018D 9180 010A LDS	R24,i
+    0018F 9190 010B LDS	R25,i+1
+    00191 9601      ADIW	R24,1
+    00192 9390 010B STS	i+1,R25
+    00194 9380 010A STS	i,R24
+    00196 EF82      LDI	R24,0xF2
+    00197 E090      LDI	R25,0
+    00198 91E0 010C LDS	R30,count
+    0019A 91F0 010D LDS	R31,count+1
+    0019C 0FEE      LSL	R30
+    0019D 1FFF      ROL	R31
+    0019E 0FE8      ADD	R30,R24
+    0019F 1FF9      ADC	R31,R25
+    001A0 8020      LD	R2,Z
+    001A1 8031      LDD	R3,Z+1
+    001A2 9040 010A LDS	R4,i
+    001A4 9050 010B LDS	R5,i+1
+    001A6 1442      CP	R4,R2
+    001A7 0453      CPC	R5,R3
+    001A8 F408      BCC	0x01AA
+    001A9 CEEE      RJMP	0x0098
+(0137)             break;
+(0138)         }
+(0139)     }
+(0140)     PORTC = 0xFF;
+    001AA EF8F      LDI	R24,0xFF
+    001AB BB85      OUT	0x15,R24
+(0141)     count += 1;
+    001AC 9180 010C LDS	R24,count
+    001AE 9190 010D LDS	R25,count+1
+    001B0 9601      ADIW	R24,1
+    001B1 9390 010D STS	count+1,R25
+    001B3 9380 010C STS	count,R24
+(0142)    
+(0143)     if(count == 10)
+    001B5 308A      CPI	R24,0xA
+    001B6 E0E0      LDI	R30,0
+    001B7 079E      CPC	R25,R30
+    001B8 F439      BNE	0x01C0
+(0144)     {
+(0145)         count = 1;
+    001B9 E081      LDI	R24,1
+    001BA E090      LDI	R25,0
+    001BB 9390 010D STS	count+1,R25
+    001BD 9380 010C STS	count,R24
+(0146) 		timer0_open();
+    001BF D077      RCALL	_timer0_open
+(0147)     }
+    001C0 9508      RET
+(0148) }
+(0149)  
+(0150) void btn2(void)
+(0151) {
+(0152)     S_OFF;
+_btn2:
+    001C1 9AA8      SBI	0x15,0
+    001C2 9AA9      SBI	0x15,1
+    001C3 9AAA      SBI	0x15,2
+    001C4 9AAB      SBI	0x15,3
+(0153)     switch(count2)
+    001C5 9020 010E LDS	R2,count2
+    001C7 9030 010F LDS	R3,count2+1
+    001C9 2022      TST	R2
+    001CA F411      BNE	0x01CD
+    001CB 2033      TST	R3
+    001CC F031      BEQ	0x01D3
+    001CD 01C1      MOVW	R24,R2
+    001CE 3081      CPI	R24,1
+    001CF E0E0      LDI	R30,0
+    001D0 079E      CPC	R25,R30
+    001D1 F089      BEQ	0x01E3
+    001D2 C01F      RJMP	0x01F2
+(0154)     {
+(0155)         case 0:PORTD = seg[0];S_ON;count2=1;break;
+    001D3 9020 0060 LDS	R2,seg
+    001D5 9030 0061 LDS	R3,seg+1
+    001D7 BA22      OUT	0x12,R2
+    001D8 98A8      CBI	0x15,0
+    001D9 98A9      CBI	0x15,1
+    001DA 98AA      CBI	0x15,2
+    001DB 98AB      CBI	0x15,3
+    001DC E081      LDI	R24,1
+    001DD E090      LDI	R25,0
+    001DE 9390 010F STS	count2+1,R25
+    001E0 9380 010E STS	count2,R24
+    001E2 C00F      RJMP	0x01F2
+(0156)         case 1:PORTD = seg[10];S_ON;count2=0;break;
+    001E3 9020 0074 LDS	R2,seg+20
+    001E5 9030 0075 LDS	R3,seg+21
+    001E7 BA22      OUT	0x12,R2
+    001E8 98A8      CBI	0x15,0
+    001E9 98A9      CBI	0x15,1
+    001EA 98AA      CBI	0x15,2
+    001EB 98AB      CBI	0x15,3
+    001EC 2422      CLR	R2
+    001ED 2433      CLR	R3
+    001EE 9230 010F STS	count2+1,R3
+    001F0 9220 010E STS	count2,R2
+    001F2 9508      RET
+_key_scan:
+    001F3 934A      ST	-Y,R20
+    001F4 935A      ST	-Y,R21
+(0157)     }
+(0158) }
+(0159)  
+(0160) void key_scan(void)
+(0161) {
+(0162)     if((PINB&0x3F)!=0x3F)     //假如1~8顆按鈕有被按下去(=0)
+    001F5 B386      IN	R24,0x16
+    001F6 738F      ANDI	R24,0x3F
+    001F7 338F      CPI	R24,0x3F
+    001F8 F0C9      BEQ	0x0212
+(0163)     {
+(0164)         if((PINB&0x3F)!=0x3F)
+    001F9 B386      IN	R24,0x16
+    001FA 738F      ANDI	R24,0x3F
+    001FB 338F      CPI	R24,0x3F
+    001FC F0A9      BEQ	0x0212
+(0165)         {
+(0166)             delay_ms(20);
+    001FD E104      LDI	R16,0x14
+    001FE E010      LDI	R17,0
+    001FF D01D      RCALL	_delay_ms
+(0167)             switch(PINB)
+    00200 B346      IN	R20,0x16
+    00201 2755      CLR	R21
+    00202 334B      CPI	R20,0x3B
+    00203 E0E0      LDI	R30,0
+    00204 075E      CPC	R21,R30
+    00205 F041      BEQ	0x020E
+    00206 334E      CPI	R20,0x3E
+    00207 E0E0      LDI	R30,0
+    00208 075E      CPC	R21,R30
+    00209 F009      BEQ	0x020B
+    0020A C004      RJMP	0x020F
+(0168)             {
+(0169)                 case 0X3E:
+(0170) 					timer0_close();
+    0020B D036      RCALL	_timer0_close
+(0171)                     btn1_count();
+    0020C DE80      RCALL	_btn1_count
+(0172)                 break;//S1
+    0020D C001      RJMP	0x020F
+(0173)                
+(0174)                 case 0X3B:
+(0175)                     timer0_open();
+    0020E D028      RCALL	_timer0_open
+(0176)                 break;//S2
+(0177)                 default:break;
+(0178)             }              
+(0179)             delay_ms(1);
+    0020F E001      LDI	R16,1
+    00210 E010      LDI	R17,0
+    00211 D00B      RCALL	_delay_ms
+(0180)         }
+(0181)     }
+    00212 9159      LD	R21,Y+
+    00213 9149      LD	R20,Y+
+    00214 9508      RET
+(0182) }
+(0183)  
+(0184) void delay_us(unsigned int microsecond)
+(0185) {      
+(0186)     do
+(0187)     {
+(0188)         microsecond--;
+_delay_us:
+  microsecond          --> R16
+    00215 5001      SUBI	R16,1
+    00216 4010      SBCI	R17,0
+(0189)     }        
+(0190)     while (microsecond>1);
+    00217 E081      LDI	R24,1
+    00218 E090      LDI	R25,0
+    00219 1780      CP	R24,R16
+    0021A 0791      CPC	R25,R17
+    0021B F3C8      BCS	0x0215
+    0021C 9508      RET
+_delay_ms:
+  millisecond          --> R20
+    0021D 934A      ST	-Y,R20
+    0021E 935A      ST	-Y,R21
+    0021F 01A8      MOVW	R20,R16
+(0191) }
+(0192)  
+(0193) void delay_ms(unsigned int millisecond)
+(0194) {      
+    00220 C003      RJMP	0x0224
+(0195)     while (millisecond--)
+(0196)     {
+(0197)         delay_us(999);
+    00221 EE07      LDI	R16,0xE7
+    00222 E013      LDI	R17,3
+    00223 DFF1      RCALL	_delay_us
+    00224 011A      MOVW	R2,R20
+    00225 5041      SUBI	R20,1
+    00226 4050      SBCI	R21,0
+    00227 2022      TST	R2
+    00228 F7C1      BNE	0x0221
+    00229 2033      TST	R3
+    0022A F7B1      BNE	0x0221
+    0022B 9159      LD	R21,Y+
+    0022C 9149      LD	R20,Y+
+    0022D 9508      RET
+(0198)     }  
+(0199) }
+(0200)  
+(0201) //I、O口初始化
+(0202) void port_init(void)
+(0203) {
+(0204)     DDRB  = 0XC0;
+_port_init:
+    0022E EC80      LDI	R24,0xC0
+    0022F BB87      OUT	0x17,R24
+(0205)     PORTB = 0XFF;//按鈕
+    00230 EF8F      LDI	R24,0xFF
+    00231 BB88      OUT	0x18,R24
+(0206)  
+(0207)     PORTC = 0xFF;
+    00232 BB85      OUT	0x15,R24
+(0208)     DDRC  = 0xFF;
+    00233 BB84      OUT	0x14,R24
+(0209)     PORTD = 0xFF;
+    00234 BB82      OUT	0x12,R24
+(0210)     DDRD  = 0xFF;//七段顯示器
+    00235 BB81      OUT	0x11,R24
+    00236 9508      RET
+(0211) }
+(0212)  
+(0213) void timer0_open(void)
+(0214) {
+(0215)     CLI();
+_timer0_open:
+    00237 94F8      BCLR	7
+(0216)     TCNT0 = 0x05;
+    00238 E085      LDI	R24,5
+    00239 BF82      OUT	0x32,R24
+(0217)     TIMSK |= BIT(TOIE0);
+    0023A B789      IN	R24,0x39
+    0023B 6081      ORI	R24,1
+    0023C BF89      OUT	0x39,R24
+(0218)     TCCR0 |= BIT(CS01) | BIT(CS00);
+    0023D B783      IN	R24,0x33
+    0023E 6083      ORI	R24,3
+    0023F BF83      OUT	0x33,R24
+(0219)     SEI();
+    00240 9478      BSET	7
+    00241 9508      RET
+(0220) }
+(0221) 
+(0222) void timer0_close(void)
+(0223) {
+(0224) 	CLI();
+_timer0_close:
+    00242 94F8      BCLR	7
+(0225)     TIMSK &= ~BIT(TOIE0);
+    00243 B789      IN	R24,0x39
+    00244 7F8E      ANDI	R24,0xFE
+    00245 BF89      OUT	0x39,R24
+(0226)     TCCR0 &= ~(BIT(CS02) | BIT(CS01) | BIT(CS00));
+    00246 B783      IN	R24,0x33
+    00247 7F88      ANDI	R24,0xF8
+    00248 BF83      OUT	0x33,R24
+(0227)     SEI();
+    00249 9478      BSET	7
+    0024A 9508      RET
+(0228) }
+(0229)  
+(0230) //CPU總體初始化
+(0231) void init_devices(void)
+(0232) {
+(0233)     CLI();
+_init_devices:
+    0024B 94F8      BCLR	7
+(0234)     port_init();
+    0024C DFE1      RCALL	_port_init
+(0235)     MCUCR = 0x00;
+    0024D 2422      CLR	R2
+    0024E BE25      OUT	0x35,R2
+(0236)     GICR  = 0x00;
+    0024F BE2B      OUT	0x3B,R2
+(0237)    
+(0238)     TIMSK = 0x00;
+    00250 BE29      OUT	0x39,R2
+(0239)     TCCR0 = 0x00;
+    00251 BE23      OUT	0x33,R2
+(0240)     TCNT0 = 0x05;
+    00252 E085      LDI	R24,5
+    00253 BF82      OUT	0x32,R24
+(0241)     SEI();
+    00254 9478      BSET	7
+    00255 9508      RET
+_timer0_ovf_isr:
+    00256 920A      ST	-Y,R0
+    00257 921A      ST	-Y,R1
+    00258 922A      ST	-Y,R2
+    00259 923A      ST	-Y,R3
+    0025A 924A      ST	-Y,R4
+    0025B 925A      ST	-Y,R5
+    0025C 926A      ST	-Y,R6
+    0025D 927A      ST	-Y,R7
+    0025E 928A      ST	-Y,R8
+    0025F 929A      ST	-Y,R9
+    00260 930A      ST	-Y,R16
+    00261 931A      ST	-Y,R17
+    00262 932A      ST	-Y,R18
+    00263 933A      ST	-Y,R19
+    00264 938A      ST	-Y,R24
+    00265 939A      ST	-Y,R25
+    00266 93AA      ST	-Y,R26
+    00267 93BA      ST	-Y,R27
+    00268 93EA      ST	-Y,R30
+    00269 93FA      ST	-Y,R31
+    0026A B60F      IN	R0,0x3F
+    0026B 920A      ST	-Y,R0
+(0242) }
+(0243) //向量值
+(0244) #pragma interrupt_handler timer0_ovf_isr:10    
+(0245) void timer0_ovf_isr(void)
+(0246) {    
+(0247)     TCNT0 = 0X05;
+    0026C E085      LDI	R24,5
+    0026D BF82      OUT	0x32,R24
+(0248)     data++;
+    0026E 9180 0106 LDS	R24,data
+    00270 9190 0107 LDS	R25,data+1
+    00272 9601      ADIW	R24,1
+    00273 9390 0107 STS	data+1,R25
+    00275 9380 0106 STS	data,R24
+(0249)     if(500==data)
+    00277 3F84      CPI	R24,0xF4
+    00278 E0E1      LDI	R30,1
+    00279 079E      CPC	R25,R30
+    0027A F439      BNE	0x0282
+(0250)     {
+(0251)         data = 0;
+    0027B 2422      CLR	R2
+    0027C 2433      CLR	R3
+    0027D 9230 0107 STS	data+1,R3
+    0027F 9220 0106 STS	data,R2
+(0252)         btn2();
+    00281 DF3F      RCALL	_btn2
+(0253)     }
+    00282 9009      LD	R0,Y+
+    00283 BE0F      OUT	0x3F,R0
+    00284 91F9      LD	R31,Y+
+    00285 91E9      LD	R30,Y+
+    00286 91B9      LD	R27,Y+
+    00287 91A9      LD	R26,Y+
+    00288 9199      LD	R25,Y+
+    00289 9189      LD	R24,Y+
+    0028A 9139      LD	R19,Y+
+    0028B 9129      LD	R18,Y+
+    0028C 9119      LD	R17,Y+
+    0028D 9109      LD	R16,Y+
+    0028E 9099      LD	R9,Y+
+    0028F 9089      LD	R8,Y+
+    00290 9079      LD	R7,Y+
+    00291 9069      LD	R6,Y+
+    00292 9059      LD	R5,Y+
+    00293 9049      LD	R4,Y+
+    00294 9039      LD	R3,Y+
+    00295 9029      LD	R2,Y+
+    00296 9019      LD	R1,Y+
+    00297 9009      LD	R0,Y+
+    00298 9518      RETI
+(0254) }
+(0255)  
+(0256) void main(void)
+(0257) {
+(0258)     init_devices();
+_main:
+    00299 DFB1      RCALL	_init_devices
+    0029A C001      RJMP	0x029C
+(0259)     while(1)
+(0260)     {  
+(0261)         key_scan();
+FILE: <library>
+    0029B DF57      RCALL	_key_scan
+    0029C CFFE      RJMP	0x029B
+    0029D 9508      RET

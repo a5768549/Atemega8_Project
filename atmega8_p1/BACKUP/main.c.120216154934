@@ -1,0 +1,192 @@
+/***************************************************************************/
+/*http://www.zjarm.com							                           */
+/*矩阵键盘测试程序							                               */
+/*目标器件：ATmega128							                           */
+/*晶振:RC 1MHZ								                               */
+/*编译环境：ICCAVR 6.31A						                           */
+/*E-Mail:98dian@163.com                                                    */
+/*时间：2008年08月08日                                                     */
+/***************************************************************************/
+
+/*********************************包含头文件********************************/
+#include <iom64v.h>
+#include <macros.h>
+ 
+unsigned char key_state=0;
+/******************************************************************************* 
+* 函数名称: delay_us()
+* 入口参数: microsecond : 输入延时微秒的时间
+* 出口参数: 
+* 功能描述: 微秒的延时   	  	
+*******************************************************************************/ 
+void delay_us(unsigned int microsecond) 
+{      
+    do 
+	{ 
+        microsecond--; 
+	}         
+    while (microsecond>1); 
+}
+
+
+/******************************************************************************* 
+* 函数名称: delay_ms()
+* 入口参数: millisecond : 输入延时毫秒的时间
+* 出口参数: 
+* 功能描述: 毫秒的延时  	
+*******************************************************************************/ 
+void delay_ms(unsigned int millisecond) 
+{      
+    while (millisecond--)
+	{
+        delay_us(999);
+	}  
+}
+/******************************************************************************* 
+* 函数名称: void key_scan(void)
+* 入口参数: 
+* 出口参数: 
+* 功能描述: 键盘扫描
+*******************************************************************************/
+void key_scan(void)
+{
+         //key_scan_state = 1;
+ 	 	 ////第一行////////////////////////////////////////
+         PORTD = 0XDF;
+		 delay_ms(10);
+		 if((PIND&0x1F)!=0x1F)
+    	  {
+    	   	  delay_ms(20);
+        	  if((PIND&0x1F)!=0x1F)
+        	  {
+        	   	if((PIND&0x10)==0)//清零		
+        		{
+				   key_state = 1;
+				   while((PIND&0x10)==0);
+				   //seg_data1 = tab[1];//调试用
+				}
+        		else if((PIND&0x08)==0)//停止		
+        		{
+				   key_state = 2;
+				   while((PIND&0x08)==0);
+				   //seg_data1 = tab[2];//调试用
+				}
+    			else if((PIND&0x04)==0)//单激		
+        		{
+				   key_state = 3;
+				   while((PIND&0x04)==0);
+				   //seg_data1 = tab[3];//调试用
+				}
+        		delay_ms(1);
+			  }
+          }
+		 ////第二行////////////////////////////////////////
+		 PORTD = 0XBF;
+		 delay_ms(10);
+		 if((PIND&0x1F)!=0x1F)
+    	  {
+    	   	  delay_ms(20);
+        	  if((PIND&0x1F)!=0x1F)
+        	  {
+        	   	if((PIND&0x10)==0)//复位
+        		{
+				   key_state = 8;
+				   while((PIND&0x10)==0);
+				}
+        		else if((PIND&0x08)==0)	//NC		
+        		{
+				  
+				}
+    			else if((PIND&0x04)==0)//双激		
+        		{
+				   key_state = 4;
+				   while((PIND&0x04)==0);
+				   //seg_data1 = tab[4];//调试用
+				}
+        		delay_ms(1);
+			  }
+          }
+		  ////第二行////////////////////////////////////////
+		 PORTD = 0X7F;
+		 delay_ms(10);
+		 if((PIND&0x1F)!=0x1F)
+    	  {
+    	   	  delay_ms(20);
+        	  if((PIND&0x1F)!=0x1F)
+        	  {
+        	   	if((PIND&0x10)==0)//减弱	
+        		{
+				  key_state = 5;
+				  while((PIND&0x10)==0);
+				  //seg_data1 = tab[5];//调试用
+				}
+        		else if((PIND&0x08)==0)//开始		
+        		{
+				  key_state = 6;
+				  while((PIND&0x08)==0);
+				  //seg_data1 = tab[6];//调试用
+				}
+    			else if((PIND&0x04)==0)//增强		
+        		{
+				   key_state = 7;
+				   while((PIND&0x04)==0);
+				   //seg_data1 = tab[7];//调试用
+				}
+        		delay_ms(1);
+			  }
+          }
+		  //key_scan_state = 0;
+}
+/****************************************************************************
+函数功能:延时子程序
+入口参数:
+出口参数:
+****************************************************************************/
+void delay(void)
+{
+ 	 int i;
+  	 for(i=0;i<200;i++);
+}
+void find_key(unsigned char n)
+{
+    switch(n)
+	{
+	    case 1:PORTF = 1;
+	      break;
+		case 2:PORTF = 2;
+	      break;
+    	case 3:PORTF = 3;
+	      break;
+        case 4:PORTF = 4;
+	      break;
+	    case 5:PORTF = 5;
+	      break;
+	    case 6:PORTF = 6;
+	      break;
+	    case 7:PORTF = 7;
+	      break;
+        case 8:PORTF = 8;
+	      break;
+	    case 9:PORTF = 9;
+	      break;
+	    default:
+	      break;	
+	}	  
+}
+/****************************************************************************
+函数功能:主程序
+入口参数:
+出口参数:
+****************************************************************************/
+void main(void)
+{
+ 	 int j;
+ 	 int keyvalue=0;
+	 DDRF = 0XFF;
+     DDRC  = 0xF0;//高3位为写,低5位为读
+     PORTC = 0x0F;
+	 while(1)
+	 {
+	     find_key(key_state);
+	}
+}

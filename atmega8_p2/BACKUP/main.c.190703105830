@@ -1,0 +1,162 @@
+/*******************************************************************************
+* 版權:     木仔科技
+*
+* 單片機:   ATMAGE8
+* 晶振:     外部8MHz
+* 編譯器:   ICC 7.22
+*
+* 文件名:   main.c
+* 作者:     木仔科技
+* 版本:     1.0
+*
+* 優酷:     https://i.youku.com/gzguava
+*
+* 淘寶：    https://gzguava.taobao.com
+*
+* 功能描述: 在8M晶振下,實現四位數碼管利用定時器timer0定時動態顯示
+*******************************************************************************/
+#include<iom8v.h>
+#include<macros.h>
+
+#define S_1      PORTC &= ~BIT(0);PORTC|=BIT(1) ;PORTC|=BIT(2) ;PORTC|=BIT(3); 
+#define S_2      PORTC |= BIT(0) ;PORTC&=~BIT(1);PORTC|=BIT(2) ;PORTC|=BIT(3);
+#define S_3      PORTC |= BIT(0) ;PORTC|=BIT(1) ;PORTC&=~BIT(2);PORTC|=BIT(3);  
+#define S_4      PORTC |= BIT(0) ;PORTC|=BIT(1) ;PORTC|=BIT(2) ;PORTC&=~BIT(3);
+#define S_OFF    PORTC |= BIT(0) ;PORTC|=BIT(1) ;PORTC|=BIT(2) ;PORTC|=BIT(3);  
+#define S_ON     PORTC &= ~BIT(0);PORTC&=~BIT(1);PORTC&=~BIT(2);PORTC&=~BIT(3);
+
+#define w1       PORTD =  0x01; S_1;
+#define w2 		 PORTD =  0x01; S_2;
+#define w3		 PORTD =  0x01; S_3;
+#define w4		 PORTD =  0x01; S_4;	
+#define w5		 PORTD =  0x02; S_4;		
+#define w6		 PORTD =  0x04; S_4;	
+#define w7		 PORTD =  0x08; S_4;
+#define w8		 PORTD =  0x08; S_3;	
+#define w9		 PORTD =  0x08; S_2;	
+#define w10		 PORTD =  0x08; S_1;		
+#define w11		 PORTD =  0x10; S_1;		
+#define w12		 PORTD =  0x20; S_1;			
+void w(void)
+{
+ 	 switch(flag)
+	 {
+	  	case 1 : w1;
+		case 2 : w2;
+		case 3 : w3;
+		case 4 : w4;
+		case 5 : w5;
+		case 6 : w6;
+		case 7 : w7;
+		case 8 : w8;
+		case 9 : w9;
+		case 10:w10;
+		case 11:w11;
+		case 12:w12;
+	 }
+}
+unsigned char tab[16] = {
+		 	  		  	 0x3f,0x06,0x5b,0x4f,
+						 0x66,0x6d,0x7d,0x07,
+						 0x7f,0x6f,0x77,0x7c,
+						 0x39,0x5e,0x79,0x71
+						 };
+//初始化 變量 聲明//////////////////////////////////////////////////////////////
+unsigned char cnn=0;//定時器變量
+unsigned char i=0;//數碼管位選用
+unsigned int data=0;
+int delay_time = 500;
+int flag = 1;
+/******************************************************************************* 
+* 函數名稱: delay_us()
+* 入口參數: microsecond : 輸入延時微秒的時間
+* 出口參數: 
+* 功能描述: 微秒的延時   	  	
+*******************************************************************************/ 
+void delay_us(unsigned int microsecond) 
+{      
+    do 
+	{ 
+        microsecond--; 
+	}         
+    while (microsecond>1); 
+}
+/******************************************************************************* 
+* 函數名稱: delay_ms()
+* 入口參數: millisecond : 輸入延時毫秒的時間
+* 出口參數: 
+* 功能描述: 毫秒的延時  	
+*******************************************************************************/ 
+void delay_ms(unsigned int millisecond) 
+{      
+    while (millisecond--)
+	{
+        delay_us(999);
+	}  
+}
+//I、O口初始化
+void port_init(void)
+{
+ PORTC = 0xFF; //m103 output only
+ DDRC  = 0xFF;
+ PORTD = 0xFF;
+ DDRD  = 0xFF;
+}
+/****************************************************************************
+函數功能:
+入口參數:
+出口參數:
+****************************************************************************/
+void display(unsigned char n)
+{
+	PORTD = tab[n];
+}
+///////////////////////////////////////////
+
+//定時器0初始化
+void timer0_int(void)
+{
+    TIMSK = 0x01; //T0/C0溢出中斷使能
+	TCCR0 =(1<<CS01) | (1<<CS00);
+	TCNT0 = 0X05;//0XFF   256    (0xFF-0X05) *8M/64
+	
+}
+//CPU總體初始化
+void init_devices(void)
+{
+   
+ CLI(); //disable all interrupts
+ port_init();
+ MCUCR = 0x00;
+ GICR  = 0x00;
+ TIMSK = 0x00; //timer interrupt sources
+ timer0_int();
+ SEI(); //re-enable interrupts
+ //all peripherals are now initialized
+}
+//定時器0///////////////////////////////////////////////////////////////////////
+#pragma interrupt_handler timer0_ovf_isr:10
+void timer0_ovf_isr(void)
+{    
+   TCNT0 = 0X05;//內部晶振，幾分頻算出時間初值
+   data++;
+   if(500 == data)// 500*(255-5)*(8M/64)=T
+   {
+       data = 0;	
+	   S_OFF;		
+	   w();  
+	   flag += 1;
+	   if(flag == 12)
+	   {
+	   		flag = 1;
+	   }
+   }//end of if(1000==++cnn)
+}//end of void timer0_ovf_isr(void)
+////////////////////////////////////////////////////////////////////////////////
+void main(void)
+{
+   init_devices();
+   while(1)
+   {      
+   }
+}

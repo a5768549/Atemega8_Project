@@ -1,0 +1,416 @@
+Interrupt Vectors
+    00000 C014      RJMP	__start|__text_start
+
+Program Code (text area)
+__start|__text_start:
+    00015 E5CF      LDI	R28,0x5F
+    00016 E0D4      LDI	R29,4
+    00017 BFCD      OUT	0x3D,R28
+    00018 BFDE      OUT	0x3E,R29
+    00019 51CE      SUBI	R28,0x1E
+    0001A 40D0      SBCI	R29,0
+    0001B EA0A      LDI	R16,0xAA
+    0001C 8308      ST	Y,R16
+    0001D 2400      CLR	R0
+    0001E E6E4      LDI	R30,0x64
+    0001F E0F0      LDI	R31,0
+    00020 E010      LDI	R17,0
+    00021 36E4      CPI	R30,0x64
+    00022 07F1      CPC	R31,R17
+    00023 F011      BEQ	0x0026
+    00024 9201      ST	Z+,R0
+    00025 CFFB      RJMP	0x0021
+    00026 8300      ST	Z,R16
+    00027 E2E6      LDI	R30,0x26
+    00028 E0F0      LDI	R31,0
+    00029 E6A0      LDI	R26,0x60
+    0002A E0B0      LDI	R27,0
+    0002B E010      LDI	R17,0
+    0002C E000      LDI	R16,0
+    0002D BF0B      OUT	0x3B,R16
+    0002E 32EA      CPI	R30,0x2A
+    0002F 07F1      CPC	R31,R17
+    00030 F021      BEQ	0x0035
+    00031 95C8      LPM
+    00032 9631      ADIW	R30,1
+    00033 920D      ST	X+,R0
+    00034 CFF9      RJMP	0x002E
+    00035 D0D6      RCALL	_main
+_exit:
+    00036 CFFF      RJMP	_exit
+FILE: E:\1ン-M8\2-縒ミ龄絃-LED\main.c
+(0001) //ICC-AVR application builder : 2012/2/13 20:52:33
+(0002) /*******************************************************************************
+(0003) * 舦:     れм
+(0004) *
+(0005) * 虫诀:   ATMAGE8
+(0006) * 垂:     场8MHz
+(0007) * 絪亩竟:   ICC 7.22
+(0008) *
+(0009) * ゅン:   main.c
+(0010) * :     れм
+(0011) * セ:     1.0
+(0012) *
+(0013) * 纔慌:     https://i.youku.com/gzguava
+(0014) *
+(0015) * 瞊腳    https://gzguava.taobao.com
+(0016) *
+(0017) * 磞瓃: 8M垂,龟瞷8縒ミ龄絃陪ボ6隔LED縊
+(0018) *******************************************************************************/
+(0019) 
+(0020) /*********************************繷ゅン********************************/
+(0021) #include <iom8v.h>
+(0022) #include <macros.h>
+(0023)  
+(0024) #define LED PORTC
+(0025) int flag = 0;
+(0026) int count = 0;
+(0027) /******************************************************************************* 
+(0028) * ㄧ计嘿: delay_us()
+(0029) * 把计: microsecond : 块┑稬丁
+(0030) * 把计: 
+(0031) * 磞瓃: 稬┑   	  	
+(0032) *******************************************************************************/ 
+(0033) void delay_us(unsigned int microsecond) 
+(0034) {      
+(0035)     do 
+(0036) 	{ 
+(0037)         microsecond--; 
+_delay_us:
+  microsecond          --> R16
+    00037 5001      SUBI	R16,1
+    00038 4010      SBCI	R17,0
+(0038) 	}
+(0039)     while (microsecond>1);
+    00039 E081      LDI	R24,1
+    0003A E090      LDI	R25,0
+    0003B 1780      CP	R24,R16
+    0003C 0791      CPC	R25,R17
+    0003D F3C8      BCS	0x0037
+    0003E 9508      RET
+_delay_ms:
+  millisecond          --> R20
+    0003F 934A      ST	-Y,R20
+    00040 935A      ST	-Y,R21
+    00041 01A8      MOVW	R20,R16
+(0040) }
+(0041) /******************************************************************************* 
+(0042) * ㄧ计嘿: delay_ms()
+(0043) * 把计: millisecond : 块┑睝丁
+(0044) * 把计: 
+(0045) * 磞瓃: 睝┑  	
+(0046) *******************************************************************************/ 
+(0047) void delay_ms(unsigned int millisecond) 
+(0048) {      
+    00042 C003      RJMP	0x0046
+(0049)     while (millisecond--)
+(0050) 	{
+(0051)         delay_us(999);
+    00043 EE07      LDI	R16,0xE7
+    00044 E013      LDI	R17,3
+    00045 DFF1      RCALL	_delay_us
+    00046 011A      MOVW	R2,R20
+    00047 5041      SUBI	R20,1
+    00048 4050      SBCI	R21,0
+    00049 2022      TST	R2
+    0004A F7C1      BNE	0x0043
+    0004B 2033      TST	R3
+    0004C F7B1      BNE	0x0043
+    0004D 9159      LD	R21,Y+
+    0004E 9149      LD	R20,Y+
+    0004F 9508      RET
+_key_scan:
+    00050 934A      ST	-Y,R20
+    00051 935A      ST	-Y,R21
+(0052) 	}
+(0053) }
+(0054) /******************************************************************************* 
+(0055) * ㄧ计嘿: void key_scan(void)
+(0056) * 把计: 
+(0057) * 把计: 
+(0058) * 磞瓃: 龄絃苯磞
+(0059) *******************************************************************************/
+(0060) void key_scan(void)
+(0061) {
+(0062) 	PORTB = 0XFF;
+    00052 EF8F      LDI	R24,0xFF
+    00053 BB88      OUT	0x18,R24
+(0063) 	delay_ms(10);
+    00054 E00A      LDI	R16,0xA
+    00055 E010      LDI	R17,0
+    00056 DFE8      RCALL	_delay_ms
+(0064) 	if((PINB&0x3F)!=0x3F)     //安1~8聋秙Τ砆(=0) 
+    00057 B386      IN	R24,0x16
+    00058 738F      ANDI	R24,0x3F
+    00059 338F      CPI	R24,0x3F
+    0005A F409      BNE	0x005C
+    0005B C068      RJMP	0x00C4
+(0065) 	{ 
+(0066) 		delay_ms(20);
+    0005C E104      LDI	R16,0x14
+    0005D E010      LDI	R17,0
+    0005E DFE0      RCALL	_delay_ms
+(0067) 		if((PINB&0X3E) == 0X3E) //0X3E = S1秙
+    0005F B386      IN	R24,0x16
+    00060 738E      ANDI	R24,0x3E
+    00061 338E      CPI	R24,0x3E
+    00062 F581      BNE	0x0093
+(0068) 		{ 
+(0069) 			delay_ms(20);
+    00063 E104      LDI	R16,0x14
+    00064 E010      LDI	R17,0
+    00065 DFD9      RCALL	_delay_ms
+(0070) 			flag = 0;
+    00066 2422      CLR	R2
+    00067 2433      CLR	R3
+    00068 9230 0061 STS	flag+1,R3
+    0006A 9220 0060 STS	flag,R2
+    0006C C00C      RJMP	0x0079
+(0071) 			while((PINB) == 0X3E)
+(0072) 			{
+(0073) 				flag = flag + 1;
+    0006D 9180 0060 LDS	R24,flag
+    0006F 9190 0061 LDS	R25,flag+1
+    00071 9601      ADIW	R24,1
+    00072 9390 0061 STS	flag+1,R25
+    00074 9380 0060 STS	flag,R24
+(0074) 				delay_ms(50);
+    00076 E302      LDI	R16,0x32
+    00077 E010      LDI	R17,0
+    00078 DFC6      RCALL	_delay_ms
+    00079 B386      IN	R24,0x16
+    0007A 338E      CPI	R24,0x3E
+    0007B F389      BEQ	0x006D
+(0075) 			}
+(0076) 			if(flag >= 20)
+    0007C 9180 0060 LDS	R24,flag
+    0007E 9190 0061 LDS	R25,flag+1
+    00080 3184      CPI	R24,0x14
+    00081 E0E0      LDI	R30,0
+    00082 079E      CPC	R25,R30
+    00083 F01C      BLT	0x0087
+(0077) 			{
+(0078) 				LED = ~1;
+    00084 EF8E      LDI	R24,0xFE
+    00085 BB85      OUT	0x15,R24
+(0079) 			}
+    00086 C03A      RJMP	0x00C1
+(0080) 			else if(flag <= 20)
+    00087 E184      LDI	R24,0x14
+    00088 E090      LDI	R25,0
+    00089 9020 0060 LDS	R2,flag
+    0008B 9030 0061 LDS	R3,flag+1
+    0008D 1582      CP	R24,R2
+    0008E 0593      CPC	R25,R3
+    0008F F18C      BLT	0x00C1
+(0081) 			{
+(0082) 				LED = ~2;
+    00090 EF8D      LDI	R24,0xFD
+    00091 BB85      OUT	0x15,R24
+(0083) 			}
+(0084) 		}
+    00092 C02E      RJMP	0x00C1
+(0085) 		else if((PINB&0X3B) == 0X3B)//0X3B = S2秙
+    00093 B386      IN	R24,0x16
+    00094 738B      ANDI	R24,0x3B
+    00095 338B      CPI	R24,0x3B
+    00096 F551      BNE	0x00C1
+(0086) 		{ 
+(0087) 			delay_ms(20);
+    00097 E104      LDI	R16,0x14
+    00098 E010      LDI	R17,0
+    00099 DFA5      RCALL	_delay_ms
+(0088) 			if(count == 0)
+    0009A 9020 0062 LDS	R2,count
+    0009C 9030 0063 LDS	R3,count+1
+    0009E 2022      TST	R2
+    0009F F471      BNE	0x00AE
+    000A0 2033      TST	R3
+    000A1 F461      BNE	0x00AE
+(0089) 			{
+(0090) 				LED = 3;
+    000A2 E083      LDI	R24,3
+    000A3 BB85      OUT	0x15,R24
+(0091) 				count = count + 1;
+    000A4 01C1      MOVW	R24,R2
+    000A5 9601      ADIW	R24,1
+    000A6 9390 0063 STS	count+1,R25
+    000A8 9380 0062 STS	count,R24
+(0092) 				delay_ms(100);
+    000AA E604      LDI	R16,0x64
+    000AB E010      LDI	R17,0
+    000AC DF92      RCALL	_delay_ms
+(0093) 			}
+    000AD C013      RJMP	0x00C1
+(0094) 			else if(count == 1)
+    000AE 9180 0062 LDS	R24,count
+    000B0 9190 0063 LDS	R25,count+1
+    000B2 3081      CPI	R24,1
+    000B3 E0E0      LDI	R30,0
+    000B4 079E      CPC	R25,R30
+    000B5 F459      BNE	0x00C1
+(0095) 			{
+(0096) 				LED = 4;
+    000B6 E084      LDI	R24,4
+    000B7 BB85      OUT	0x15,R24
+(0097) 				count = 0;
+    000B8 2422      CLR	R2
+    000B9 2433      CLR	R3
+    000BA 9230 0063 STS	count+1,R3
+    000BC 9220 0062 STS	count,R2
+(0098) 				delay_ms(100);
+    000BE E604      LDI	R16,0x64
+    000BF E010      LDI	R17,0
+    000C0 DF7E      RCALL	_delay_ms
+(0099) 			}
+(0100) 			//LED = 1 穦单 LED = 0XF1LED = 2 穦单 LED = 0XF2摸崩 
+(0101) 		}
+(0102) 	delay_ms(1);
+    000C1 E001      LDI	R16,1
+    000C2 E010      LDI	R17,0
+    000C3 DF7B      RCALL	_delay_ms
+(0103) 	}
+(0104) 	
+(0105) 	PORTC |= BIT(4)|BIT(5);
+    000C4 B385      IN	R24,0x15
+    000C5 6380      ORI	R24,0x30
+    000C6 BB85      OUT	0x15,R24
+(0106) 	delay_ms(10);
+    000C7 E00A      LDI	R16,0xA
+    000C8 E010      LDI	R17,0
+    000C9 DF75      RCALL	_delay_ms
+(0107) 	if((PINC&0x30)!=0x30)//0011 0000
+    000CA B383      IN	R24,0x13
+    000CB 7380      ANDI	R24,0x30
+    000CC 3380      CPI	R24,0x30
+    000CD F119      BEQ	0x00F1
+(0108) 	{
+(0109) 		delay_ms(20);
+    000CE E104      LDI	R16,0x14
+    000CF E010      LDI	R17,0
+    000D0 DF6E      RCALL	_delay_ms
+(0110) 		if((PINC&0x30)!=0x30)
+    000D1 B383      IN	R24,0x13
+    000D2 7380      ANDI	R24,0x30
+    000D3 3380      CPI	R24,0x30
+    000D4 F0E1      BEQ	0x00F1
+(0111) 		{ 
+(0112) 			switch(PINC&0X30)//0001 0000
+    000D5 B343      IN	R20,0x13
+    000D6 2755      CLR	R21
+    000D7 7340      ANDI	R20,0x30
+    000D8 7050      ANDI	R21,0
+    000D9 3140      CPI	R20,0x10
+    000DA E0E0      LDI	R30,0
+    000DB 075E      CPC	R21,R30
+    000DC F049      BEQ	0x00E6
+    000DD 3140      CPI	R20,0x10
+    000DE E0E0      LDI	R30,0
+    000DF 075E      CPC	R21,R30
+    000E0 F05C      BLT	0x00EC
+    000E1 3240      CPI	R20,0x20
+    000E2 E0E0      LDI	R30,0
+    000E3 075E      CPC	R21,R30
+    000E4 F021      BEQ	0x00E9
+    000E5 C006      RJMP	0x00EC
+(0113) 			{
+(0114) 				case 0X10:LED = 7;break;//S7
+    000E6 E087      LDI	R24,7
+    000E7 BB85      OUT	0x15,R24
+    000E8 C005      RJMP	0x00EE
+(0115) 				case 0X20:LED = 3;break;//S3
+    000E9 E083      LDI	R24,3
+    000EA BB85      OUT	0x15,R24
+    000EB C002      RJMP	0x00EE
+(0116) 				default:LED = 0XFF;break;
+    000EC EF8F      LDI	R24,0xFF
+    000ED BB85      OUT	0x15,R24
+(0117) 			}				
+(0118) 			delay_ms(1);
+    000EE E001      LDI	R16,1
+    000EF E010      LDI	R17,0
+    000F0 DF4E      RCALL	_delay_ms
+(0119) 		}
+(0120) 	}
+    000F1 9159      LD	R21,Y+
+    000F2 9149      LD	R20,Y+
+    000F3 9508      RET
+(0121) 
+(0122) }
+(0123) /******************************************************************************* 
+(0124) * ㄧ计嘿: 
+(0125) * 把计: 
+(0126) * 把计: 
+(0127) * 磞瓃: 
+(0128) *******************************************************************************/ 
+(0129) void port_int(void)
+(0130) {
+(0131)       //stop errant interrupts until set up
+(0132)      CLI(); //disable all interrupts
+_port_int:
+    000F4 94F8      BCLR	7
+(0133)      DDRB = 0XC0;//1100 0000
+    000F5 EC80      LDI	R24,0xC0
+    000F6 BB87      OUT	0x17,R24
+(0134) 	 PORTB = 0XFF;
+    000F7 EF8F      LDI	R24,0xFF
+    000F8 BB88      OUT	0x18,R24
+(0135) 	 DDRC  = 0x3F;//0011 1111
+    000F9 E38F      LDI	R24,0x3F
+    000FA BB84      OUT	0x14,R24
+(0136)      PORTC = 0xFF; 
+    000FB EF8F      LDI	R24,0xFF
+    000FC BB85      OUT	0x15,R24
+(0137) 	 MCUCR = 0x00;
+    000FD 2422      CLR	R2
+    000FE BE25      OUT	0x35,R2
+(0138) 	 GICR  = 0x00;
+    000FF BE2B      OUT	0x3B,R2
+(0139) 	 TIMSK = 0x00; //timer interrupt sources
+    00100 BE29      OUT	0x39,R2
+(0140) 	 SEI();
+    00101 9478      BSET	7
+    00102 9508      RET
+(0141) }
+(0142) /****************************************************************************
+(0143) ㄧ计:┑祘
+(0144) 把计:
+(0145) 把计:
+(0146) ****************************************************************************/
+(0147) void delay(void)
+(0148) {
+(0149)  	 int i;
+(0150)   	 for(i=0;i<200;i++);
+_delay:
+  i                    --> R16
+    00103 2700      CLR	R16
+    00104 2711      CLR	R17
+    00105 5F0F      SUBI	R16,0xFF
+    00106 4F1F      SBCI	R17,0xFF
+    00107 3C08      CPI	R16,0xC8
+    00108 E0E0      LDI	R30,0
+    00109 071E      CPC	R17,R30
+    0010A F3D4      BLT	0x0105
+    0010B 9508      RET
+(0151) }
+(0152) /****************************************************************************
+(0153) ㄧ计:祘
+(0154) 把计:
+(0155) 把计:
+(0156) ****************************************************************************/
+(0157) void main(void)
+(0158) {
+(0159) 	 port_int();
+_main:
+    0010C DFE7      RCALL	_port_int
+(0160) 	 LED = 0XFF;
+    0010D EF8F      LDI	R24,0xFF
+    0010E BB85      OUT	0x15,R24
+    0010F C001      RJMP	0x0111
+(0161) 	 while(1)
+(0162) 	 {
+(0163) 	    key_scan(); 
+FILE: <library>
+    00110 DF3F      RCALL	_key_scan
+    00111 CFFE      RJMP	0x0110
+    00112 9508      RET

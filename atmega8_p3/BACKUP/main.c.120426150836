@@ -1,0 +1,219 @@
+/*******************************************************************************
+* 版权:     木子工作室
+*
+* 单片机:   ATMAGE64A AU 1036
+* 晶振:     外部8MHz
+* 编译器:   ICC 7.22
+*
+* 文件名:   main.c
+* 作者:     木子工作室
+* 版本:     1.0
+* 完成日期: 
+* 功能描述: 在8M晶振下,实现四位数码管的动态显示
+*******************************************************************************/
+#include<iom64v.h>
+#include<macros.h>
+
+#define SEG_PORT PORTD     //数码管数据口
+
+#define SEG1_ON   PORTG |= BIT(4);
+#define SEG1_OFF  PORTG &= ~BIT(4); 
+
+#define SEG2_ON   PORTG |= BIT(3);
+#define SEG2_OFF  PORTG &= ~BIT(3);
+ 
+#define SEG3_ON   PORTG |= BIT(1); 
+#define SEG3_OFF  PORTG &= ~BIT(1);
+
+#define SEG4_ON   PORTG |= BIT(0); 
+#define SEG4_OFF  PORTG &= ~BIT(0);
+
+#define DS_ON    PORTC |= BIT(5);
+#define DS_OFF   PORTC &= ~BIT(5);
+
+#define STCP_ON  PORTC |= BIT(6);
+#define STCP_OFF PORTC &= ~BIT(6);
+
+#define SHCP_ON  PORTC |= BIT(7);
+#define SHCP_OFF PORTC &= ~BIT(7);
+
+#define S_1      PORTC&=~BIT(0);PORTC|=BIT(1);PORTC&=~BIT(2); 
+#define S_2      PORTC&=~BIT(0);PORTC|=BIT(1);PORTC|=BIT(2); 
+#define S_3      PORTC|=BIT(0);PORTC|=BIT(1);PORTC&=~BIT(2);  
+#define S_4      PORTC|=BIT(0);PORTC|=BIT(1);PORTC|=BIT(2); 
+#define S_5      PORTC&=~BIT(0);PORTC&=~BIT(1);PORTC&=~BIT(2); 
+#define S_6      PORTC&=~BIT(0);PORTC&=~BIT(1);PORTC|=BIT(2); 
+#define S_7      PORTC|=BIT(0);PORTC&=~BIT(1);PORTC&=~BIT(2); 
+#define S_8      PORTC|=BIT(0);PORTC&=~BIT(1);PORTC|=BIT(2); 
+
+//初始化 变量 声明//////////////////////////////////////////////////////////////
+unsigned char cnn=0;//定时器变量
+unsigned char i=0;//数码管位选用
+unsigned char ad=0;//AD采集间隔
+unsigned int ad_data1=0,ad_data2=0;
+unsigned char tab[16] = {
+		 	  		  	 0x3f,0x06,0x5b,0x4f,
+						 0x66,0x6d,0x7d,0x07,
+						 0x7f,0x6f,0x77,0x7c,
+						 0x39,0x5e,0x79,0x71
+						 };
+/******************************************************************************* 
+* 函数名称: delay_us()
+* 入口参数: microsecond : 输入延时微秒的时间
+* 出口参数: 
+* 功能描述: 微秒的延时   	  	
+*******************************************************************************/ 
+void delay_us(unsigned int microsecond) 
+{      
+    do 
+	{ 
+        microsecond--; 
+	}         
+    while (microsecond>1); 
+}
+/******************************************************************************* 
+* 函数名称: delay_ms()
+* 入口参数: millisecond : 输入延时毫秒的时间
+* 出口参数: 
+* 功能描述: 毫秒的延时  	
+*******************************************************************************/ 
+void delay_ms(unsigned int millisecond) 
+{      
+    while (millisecond--)
+	{
+        delay_us(999);
+	}  
+}
+//I、O口初始化
+void por_init(void)
+{
+   PORTC = 0XE7;
+   DDRC = 0XE7;
+   PORTE = 0X80;
+   DDRE = 0X80;
+   PORTF = 0X00;//AD采集口 ADC0 设置为输入
+   DDRF = 0X00;
+   
+}
+/****************************************************************************
+函数功能:
+入口参数:
+出口参数:
+****************************************************************************/
+void HC595_sendbyte(unsigned char n)
+{
+    unsigned char i;
+	for(i = 0;i < 8;i ++)
+	{
+	    if(n & 0x80)
+		{
+		    DS_ON;
+		}
+		else 
+		{
+		    DS_OFF;
+		}
+		SHCP_OFF;
+		delay_us(200);
+		SHCP_ON;
+		n <<= 1;
+	}
+}
+/****************************************************************************
+函数功能:
+入口参数:
+出口参数:
+****************************************************************************/
+void display(unsigned char n)
+{
+    STCP_OFF;
+	HC595_sendbyte(tab[n]);
+	STCP_ON;
+}
+/****************************************************************************
+函数功能:
+入口参数:
+出口参数:
+****************************************************************************/
+void display1(unsigned char n)
+{
+    STCP_OFF;
+	HC595_sendbyte(tab[n]|0x80);
+	STCP_ON;
+}
+///////////////////////////////////////////
+
+//定时器0初始化
+void timer0_int(void)
+{
+     TCCR0 =(1<<CS01) | (1<<CS00);//T0/C0  0000 0011======32分频
+	 TCNT0 = 0X05;//几分频算出时间初值
+	 //8M 32分频  4US*(255-5)===1000us
+	 TIMSK = 0x01; //T0/C0溢出中断使能
+}
+//CPU总体初始化
+void init_devices(void)
+{
+   por_init();
+   timer0_int();
+   SEI();
+}
+unsigned int ad_cat(void)//电压采集函数
+{
+     unsigned int t1,t2;
+	 ADMUX=0x07;//1100 0000     11:内部基准电压 0:左对齐 00000:ADC0通道
+	 ACSR = 0x80;//此处加不加都可以
+	 ADCSRA|=BIT(ADEN);           //使能ADC
+	 ADCSRA|=BIT(ADSC);           //启动转换
+	 while(!(ADCSRA&(BIT(ADIF))));//等待转换结束
+     ADCSRA&=~BIT(ADIF);//ADIF在ADC转换结束后置位
+     t1 = (unsigned int)ADCL;
+     t2 = (unsigned int)ADCH;
+     t2 = (t2<<8)+t1;
+     return t2;
+}
+unsigned int ad_chane(unsigned int i)//电压转换函数
+{
+   long x;
+   unsigned int y;
+   x = (2500*(long)i)/1024;
+   y = (unsigned int)x;
+   return y;
+}
+//定时器0///////////////////////////////////////////////////////////////////////
+#pragma interrupt_handler timer0_ovf_isr:17
+void timer0_ovf_isr(void)
+{    
+   TCNT0 = 0X05;//内部晶振，几分频算出时间初值
+   cnn++;
+   if(4==cnn)//4*1ms=4ms
+   {
+      cnn=0;
+	  ad++;
+      if(25==ad)//AD采集
+         {
+         ad=0;
+	     ad_data1=ad_cat();
+		 ad_data2=ad_chane(ad_data1);
+         }
+      switch(i++)
+      {
+	     case 0:display1(ad_data2/1000);S_1;break;
+		 case 1:display((ad_data2%1000)/100);S_2;break;
+		 case 2:display((ad_data2%100)/10);S_3;break;
+		 case 3:display(ad_data2%10);S_4;i=0;break;
+		 default:i=0;break;
+	  }//end of switch(i++)
+   }//end of if(10==++cnn)
+}//end of void timer0_ovf_isr(void)
+////////////////////////////////////////////////////////////////////////////////
+void main(void)
+{
+   init_devices();
+   PORTE |= BIT(7);//开蜂鸣器
+   delay_ms(100); 
+   PORTE &= ~BIT(7);//关蜂鸣器
+   while(1)
+   { 
+   }
+}

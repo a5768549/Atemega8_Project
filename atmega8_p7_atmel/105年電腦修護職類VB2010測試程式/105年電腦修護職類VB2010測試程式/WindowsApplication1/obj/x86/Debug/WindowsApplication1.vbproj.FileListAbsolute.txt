@@ -1,0 +1,151 @@
+C:\Users\Administrator\AppData\Local\Temporary Projects\WindowsApplication1\bin\Debug\WindowsApplication1.exe
+C:\Users\Administrator\AppData\Local\Temporary Projects\WindowsApplication1\bin\Debug\WindowsApplication1.pdb
+C:\Users\Administrator\AppData\Local\Temporary Projects\WindowsApplication1\bin\Debug\WindowsApplication1.xml
+C:\Users\Administrator\AppData\Local\Temporary Projects\WindowsApplication1\obj\x86\Debug\Interop.USBHID.dll
+C:\Users\Administrator\AppData\Local\Temporary Projects\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.ResolveComReference.cache
+C:\Users\Administrator\AppData\Local\Temporary Projects\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Form1.resources
+C:\Users\Administrator\AppData\Local\Temporary Projects\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Resources.resources
+C:\Users\Administrator\AppData\Local\Temporary Projects\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.GenerateResource.Cache
+C:\Users\Administrator\AppData\Local\Temporary Projects\WindowsApplication1\obj\x86\Debug\WindowsApplication1.exe
+C:\Users\Administrator\AppData\Local\Temporary Projects\WindowsApplication1\obj\x86\Debug\WindowsApplication1.xml
+C:\Users\Administrator\AppData\Local\Temporary Projects\WindowsApplication1\obj\x86\Debug\WindowsApplication1.pdb
+C:\Users\Administrator\documents\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\obj\x86\Debug\Interop.USBHID.dll
+C:\Users\Administrator\documents\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.ResolveComReference.cache
+C:\Users\Administrator\documents\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.exe
+C:\Users\Administrator\documents\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.xml
+C:\Users\Administrator\documents\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.pdb
+C:\Users\Administrator\documents\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\bin\Debug\WindowsApplication1.exe
+C:\Users\Administrator\documents\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\bin\Debug\WindowsApplication1.pdb
+C:\Users\Administrator\documents\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\bin\Debug\WindowsApplication1.xml
+C:\Users\Administrator\documents\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Form1.resources
+C:\Users\Administrator\documents\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Resources.resources
+C:\Users\Administrator\documents\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.GenerateResource.Cache
+C:\Exam\WindowsApplication1\WindowsApplication1\obj\x86\Debug\Interop.USBHID.dll
+C:\Exam\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.ResolveComReference.cache
+C:\Exam\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.exe
+C:\Exam\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.xml
+C:\Exam\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.pdb
+C:\Exam\WindowsApplication1\WindowsApplication1\bin\Debug\WindowsApplication1.exe
+C:\Exam\WindowsApplication1\WindowsApplication1\bin\Debug\WindowsApplication1.pdb
+C:\Exam\WindowsApplication1\WindowsApplication1\bin\Debug\WindowsApplication1.xml
+C:\Exam\WindowsApplication1\WindowsApplication1\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Exam\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Form1.resources
+C:\Exam\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Resources.resources
+C:\Exam\WindowsApplication1\WindowsApplication1\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Exam\WindowsApplication1\WindowsApplication1\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\Owner\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\Interop.USBHID.dll
+C:\Users\Owner\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.ResolveComReference.cache
+C:\Users\Owner\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.exe
+C:\Users\Owner\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.xml
+C:\Users\Owner\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.pdb
+C:\Users\Owner\Desktop\WindowsApplication1\WindowsApplication1\bin\Debug\WindowsApplication1.exe
+C:\Users\Owner\Desktop\WindowsApplication1\WindowsApplication1\bin\Debug\WindowsApplication1.pdb
+C:\Users\Owner\Desktop\WindowsApplication1\WindowsApplication1\bin\Debug\WindowsApplication1.xml
+C:\Users\Owner\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Owner\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Form1.resources
+C:\Users\Owner\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Resources.resources
+C:\Users\Owner\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\Owner\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\lonchn\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.ResolveComReference.cache
+C:\Users\lonchn\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.exe
+C:\Users\lonchn\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.xml
+C:\Users\lonchn\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.pdb
+C:\Users\lonchn\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Form1.resources
+C:\Users\lonchn\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Resources.resources
+C:\Users\lonchn\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.GenerateResource.Cache
+C:\Users\lonchn\Desktop\WindowsApplication1\WindowsApplication1\bin\Debug\WindowsApplication1.exe
+C:\Users\lonchn\Desktop\WindowsApplication1\WindowsApplication1\bin\Debug\WindowsApplication1.pdb
+C:\Users\lonchn\Desktop\WindowsApplication1\WindowsApplication1\bin\Debug\WindowsApplication1.xml
+C:\Users\lonchn\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\Interop.USBHID.dll
+C:\Users\CKVS\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.ResolveComReference.cache
+C:\Users\CKVS\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.exe
+C:\Users\CKVS\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.xml
+C:\Users\CKVS\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.pdb
+C:\Users\CKVS\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Form1.resources
+C:\Users\CKVS\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Resources.resources
+C:\Users\CKVS\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.GenerateResource.Cache
+C:\Users\CKVS\Desktop\WindowsApplication1\WindowsApplication1\bin\Debug\WindowsApplication1.exe
+C:\Users\CKVS\Desktop\WindowsApplication1\WindowsApplication1\bin\Debug\WindowsApplication1.pdb
+C:\Users\CKVS\Desktop\WindowsApplication1\WindowsApplication1\bin\Debug\WindowsApplication1.xml
+C:\Users\CKVS\Desktop\WindowsApplication1\WindowsApplication1\obj\x86\Debug\Interop.USBHID.dll
+C:\Users\CKVS\Downloads\WindowsApplication1\WindowsApplication1\obj\x86\Debug\Interop.USBHID.dll
+C:\Users\CKVS\Downloads\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.ResolveComReference.cache
+C:\Users\CKVS\Downloads\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.exe
+C:\Users\CKVS\Downloads\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.xml
+C:\Users\CKVS\Downloads\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.pdb
+C:\Users\CKVS\Downloads\WindowsApplication1\WindowsApplication1\bin\Debug\WindowsApplication1.exe
+C:\Users\CKVS\Downloads\WindowsApplication1\WindowsApplication1\bin\Debug\WindowsApplication1.pdb
+C:\Users\CKVS\Downloads\WindowsApplication1\WindowsApplication1\bin\Debug\WindowsApplication1.xml
+C:\Users\CKVS\Downloads\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Form1.resources
+C:\Users\CKVS\Downloads\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Resources.resources
+C:\Users\CKVS\Downloads\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.GenerateResource.Cache
+C:\Users\lonchn\Downloads\乙級硬體裝修VB2010程式 - 完成\WindowsApplication1\WindowsApplication1\obj\x86\Debug\Interop.USBHID.dll
+C:\Users\lonchn\Downloads\乙級硬體裝修VB2010程式 - 完成\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.ResolveComReference.cache
+C:\Users\lonchn\Downloads\乙級硬體裝修VB2010程式 - 完成\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.exe
+C:\Users\lonchn\Downloads\乙級硬體裝修VB2010程式 - 完成\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.xml
+C:\Users\lonchn\Downloads\乙級硬體裝修VB2010程式 - 完成\WindowsApplication1\WindowsApplication1\obj\x86\Debug\WindowsApplication1.pdb
+C:\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\Interop.USBHID.dll
+C:\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.ResolveComReference.cache
+C:\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.exe
+C:\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.xml
+C:\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.pdb
+C:\105年電腦修護職類VB2010測試程式\WindowsApplication1\bin\Debug\WindowsApplication1.exe
+C:\105年電腦修護職類VB2010測試程式\WindowsApplication1\bin\Debug\WindowsApplication1.pdb
+C:\105年電腦修護職類VB2010測試程式\WindowsApplication1\bin\Debug\WindowsApplication1.xml
+C:\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Form1.resources
+C:\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Resources.resources
+C:\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.GenerateResource.Cache
+C:\Users\user\Downloads\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.ResolveComReference.cache
+C:\Users\user\Downloads\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.exe
+C:\Users\user\Downloads\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.xml
+C:\Users\user\Downloads\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.pdb
+C:\Users\user\Downloads\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\bin\Debug\WindowsApplication1.exe
+C:\Users\user\Downloads\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\bin\Debug\WindowsApplication1.pdb
+C:\Users\user\Downloads\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\bin\Debug\WindowsApplication1.xml
+C:\Users\user\Downloads\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\Interop.USBHID.dll
+C:\Users\user\Downloads\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Form1.resources
+C:\Users\user\Downloads\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Resources.resources
+C:\Users\user\Downloads\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.GenerateResource.Cache
+E:\20190802\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\Interop.USBHID.dll
+E:\20190802\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.ResolveComReference.cache
+E:\20190802\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.exe
+E:\20190802\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.xml
+E:\20190802\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.pdb
+E:\20190802\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\bin\Debug\WindowsApplication1.exe
+E:\20190802\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\bin\Debug\WindowsApplication1.pdb
+E:\20190802\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\bin\Debug\WindowsApplication1.xml
+E:\20190802\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Form1.resources
+E:\20190802\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Resources.resources
+E:\20190802\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.GenerateResource.Cache
+E:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\Interop.USBHID.dll
+E:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.ResolveComReference.cache
+E:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.exe
+E:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.xml
+E:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.pdb
+E:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\bin\Debug\WindowsApplication1.exe
+E:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\bin\Debug\WindowsApplication1.pdb
+E:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\bin\Debug\WindowsApplication1.xml
+E:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Form1.resources
+E:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Resources.resources
+E:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.GenerateResource.Cache
+C:\Users\klcivs\Desktop\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.ResolveComReference.cache
+C:\Users\klcivs\Desktop\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.exe
+C:\Users\klcivs\Desktop\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.xml
+C:\Users\klcivs\Desktop\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.pdb
+C:\Users\klcivs\Desktop\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Form1.resources
+C:\Users\klcivs\Desktop\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Resources.resources
+C:\Users\klcivs\Desktop\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.GenerateResource.Cache
+C:\Users\klcivs\Desktop\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\bin\Debug\WindowsApplication1.exe
+C:\Users\klcivs\Desktop\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\bin\Debug\WindowsApplication1.pdb
+C:\Users\klcivs\Desktop\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\bin\Debug\WindowsApplication1.xml
+C:\Users\klcivs\Desktop\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\Interop.USBHID.dll
+D:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbprojAssemblyReference.cache
+D:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\Interop.USBHID.dll
+D:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.ResolveComReference.cache
+D:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Form1.resources
+D:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.Resources.resources
+D:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.GenerateResource.cache
+D:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.vbproj.CoreCompileInputs.cache
+D:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.exe
+D:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.xml
+D:\1、附件-M8\atmega8_p7_atmel\105年電腦修護職類VB2010測試程式\105年電腦修護職類VB2010測試程式\WindowsApplication1\obj\x86\Debug\WindowsApplication1.pdb

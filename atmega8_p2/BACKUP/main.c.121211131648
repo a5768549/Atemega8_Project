@@ -1,0 +1,123 @@
+/*******************************************************************************
+* 版权:     木仔工作室
+*
+* 单片机:   ATMAGE8
+* 晶振:     外部8MHz
+* 编译器:   ICC 7.22
+*
+* 文件名:   main.c
+* 作者:     木仔工作室
+* 版本:     1.0
+* 完成日期: 
+* 功能描述: 在8M晶振下,实现四位数码管利用定时器timer0定时动态显示
+*******************************************************************************/
+#include<iom8v.h>
+#include<macros.h>
+
+#define S_1      PORTC&=~BIT(0);PORTC|=BIT(1);PORTC|=BIT(2);PORTC|=BIT(3); 
+#define S_2      PORTC|=BIT(0);PORTC&=~BIT(1);PORTC|=BIT(2);PORTC|=BIT(3);
+#define S_3      PORTC|=BIT(0);PORTC|=BIT(1);PORTC&=~BIT(2);PORTC|=BIT(3);  
+#define S_4      PORTC|=BIT(0);PORTC|=BIT(1);PORTC|=BIT(2);PORTC&=~BIT(3);
+#define S_OFF    PORTC|=BIT(0);PORTC|=BIT(1);PORTC|=BIT(2);PORTC|=BIT(3);  
+#define S_ON     PORTC&=~BIT(0);PORTC&=~BIT(1);PORTC&=~BIT(2);PORTC&=~BIT(3);
+
+unsigned char tab[16] = {
+		 	  		  	 0x3f,0x06,0x5b,0x4f,
+						 0x66,0x6d,0x7d,0x07,
+						 0x7f,0x6f,0x77,0x7c,
+						 0x39,0x5e,0x79,0x71
+						 };
+//初始化 变量 声明//////////////////////////////////////////////////////////////
+unsigned char cnn=0;//定时器变量
+unsigned char i=0;//数码管位选用
+unsigned int data=0;
+/******************************************************************************* 
+* 函数名称: delay_us()
+* 入口参数: microsecond : 输入延时微秒的时间
+* 出口参数: 
+* 功能描述: 微秒的延时   	  	
+*******************************************************************************/ 
+void delay_us(unsigned int microsecond) 
+{      
+    do 
+	{ 
+        microsecond--; 
+	}         
+    while (microsecond>1); 
+}
+/******************************************************************************* 
+* 函数名称: delay_ms()
+* 入口参数: millisecond : 输入延时毫秒的时间
+* 出口参数: 
+* 功能描述: 毫秒的延时  	
+*******************************************************************************/ 
+void delay_ms(unsigned int millisecond) 
+{      
+    while (millisecond--)
+	{
+        delay_us(999);
+	}  
+}
+//I、O口初始化
+void port_init(void)
+{
+ PORTC = 0xFF; //m103 output only
+ DDRC  = 0xFF;
+ PORTD = 0xFF;
+ DDRD  = 0xFF;
+}
+/****************************************************************************
+函数功能:
+入口参数:
+出口参数:
+****************************************************************************/
+void display(unsigned char n)
+{
+	PORTD = tab[n];
+}
+///////////////////////////////////////////
+
+//定时器0初始化
+void timer0_int(void)
+{
+    TCCR0 =(1<<CS01) | (1<<CS00);
+	 TCNT0 = 0X05;
+	 TIMSK = 0x01; //T0/C0溢出中断使能
+}
+//CPU总体初始化
+void init_devices(void)
+{
+   
+ CLI(); //disable all interrupts
+ port_init();
+ MCUCR = 0x00;
+ GICR  = 0x00;
+ TIMSK = 0x00; //timer interrupt sources
+ timer0_int();
+ SEI(); //re-enable interrupts
+ //all peripherals are now initialized
+}
+//定时器0///////////////////////////////////////////////////////////////////////
+#pragma interrupt_handler timer0_ovf_isr:17
+void timer0_ovf_isr(void)
+{    
+   TCNT0 = 0X05;//内部晶振，几分频算出时间初值
+   data++;
+   if(1000 == data)
+   {
+       data = 0;
+       display(cnn++);
+	   S_1;
+	   if(10 == cnn)cnn = 0;  
+   }//end of if(1000==++cnn)
+}//end of void timer0_ovf_isr(void)
+////////////////////////////////////////////////////////////////////////////////
+void main(void)
+{
+   init_devices();
+   S_OFF;
+   S_1;
+   while(1)
+   {      
+   }
+}

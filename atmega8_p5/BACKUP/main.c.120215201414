@@ -1,0 +1,79 @@
+#include<iom64v.h>
+#include<macros.h>
+
+#define SEG_PORT  PORTD
+
+#define BEEL_ON   PORTB |= BIT(0);
+#define BEEL_OFF  PORTB &= ~BIT(0);
+
+#define SEG1_ON   PORTG |= BIT(0);
+#define SEG1_OFF  PORTG &= ~BIT(0); 
+
+#define SEG2_ON   PORTG |= BIT(1);
+#define SEG2_OFF  PORTG &= ~BIT(1);
+ 
+#define SEG3_ON   PORTG |= BIT(3); 
+#define SEG3_OFF  PORTG &= ~BIT(3);
+
+#define SEG4_ON   PORTG |= BIT(4); 
+#define SEG4_OFF  PORTG &= ~BIT(4);
+//初始化 变量 声明//////////////////////////////////////////////////////////////
+unsigned char cnn=0;//定时器变量
+unsigned char i=0;//数码管位选用
+unsigned int ad_data1=0,ad_data2=0;
+const unsigned char tab[10] = {0X03,0X9F,0X25,0X0D,0X99,0X49,0X41,0X1F,0X01,0X09};//数码管
+//I、O口初始化
+void por_init(void)
+{
+   PORTB |= BIT(0);
+   DDRB |= BIT(0);
+   PORTD = 0XFF;//数码管位选数据口
+   DDRD  = 0XFF;
+   PORTG = 0X1B;//数码管位选数据口
+   DDRG  = 0X1B;
+}
+///////////////////////////////////////////
+
+//定时器0初始化
+void timer0_int(void)
+{
+    TCCR0 =(1<<CS01) | (1<<CS00);//T0/C0  0000 0011======32分频
+	 TCNT0 = 0X05;//内部晶振，几分频算出时间初值
+	 //8M 32分频  4US*5(255-5)===1000us
+	 TIMSK = 0x01; //T0/C0溢出中断使能
+}
+//CPU总体初始化
+void init_devices(void)
+{
+   por_init();
+   timer0_int();
+   SEI();
+}
+//定时器0///////////////////////////////////////////////////////////////////////
+#pragma interrupt_handler timer0_ovf_isr:17
+void timer0_ovf_isr(void)
+{    
+   TCNT0 = 0X05;//内部晶振，几分频算出时间初值
+   cnn++;
+   if(4==cnn)//4*1ms=4ms
+   {
+      cnn=0;
+      switch(i++)
+      {
+	     case 0:SEG4_OFF;SEG1_ON;SEG_PORT=tab[ad_data2%10];break;
+		 case 1:SEG1_OFF;SEG2_ON;SEG_PORT=tab[(ad_data2/10)%10];break;
+		 case 2:SEG2_OFF;SEG3_ON;SEG_PORT=tab[(ad_data2/100)%10];break;
+		 case 3:SEG3_OFF;SEG4_ON;SEG_PORT=tab[ad_data2/1000]|0x80;i=0;break;
+		 default:i=0;break;
+	  }//end of switch(i++)
+   }//end of if(10==++cnn)
+}//end of void timer0_ovf_isr(void)
+////////////////////////////////////////////////////////////////////////////////
+void main(void)
+{
+   init_devices();
+   while(1)
+   {
+     
+   }
+}
